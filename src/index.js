@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowswerRoute as Router, Route } from 'react-router-dom';
 
-class App extends React.Component {
-	render() {
-		return <div>Hello Webpack!</div>;
-	}
-}
+import App from './js/App.js';
 
 ReactDOM.render(<App />, document.getElementById('app'));
