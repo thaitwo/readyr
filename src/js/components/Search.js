@@ -1,34 +1,50 @@
+/**
+ * DEPENDENCIES
+ */
 import React from 'react';
 import axios from 'axios';
-import { parseString } from 'xml2js';
 import _ from 'lodash';
-import { Input } from 'antd';
+import { withRouter } from 'react-router-dom';
+import { parseString } from 'xml2js';
+import { AutoComplete, Typography } from 'antd';
+const { Option } = AutoComplete;
+const { Text } = Typography;
 
-class Search extends React.Component {
-	constructor() {
-		super();
+/**
+ * CONSTANTS
+ */
+import { API_BASE_URL, CROSS_ORIGIN_URL } from '../const/api';
+import * as ROUTES from '../const/routes';
 
-		this.state = {
-			title: '',
-			suggestions: []
-		};
+const INITIAL_STATE = {
+	value: '',
+	suggestions: []
+};
+
+class SearchBox extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = { ...INITIAL_STATE };
 
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSelect = this.handleSelect.bind(this);
 		this.renderSuggestions = this.renderSuggestions.bind(this);
 	}
 
-	handleChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+	handleChange(value) {
+		this.setState({ value });
 
 		axios
-			.get(`https://cors-anywhere.herokuapp.com/https://www.goodreads.com/search/index.xml`, {
+			.get(`${CROSS_ORIGIN_URL}/${API_BASE_URL}/search/index.xml`, {
 				params: {
 					key: process.env.API_KEY,
-					q: this.state.title
+					q: value
 				}
 			})
 			.then(xml => {
 				parseString(xml.data, (err, result) => {
+					console.log('hey', result);
 					let hasSuggestions = _.isPlainObject(
 						result['GoodreadsResponse']['search'][0]['results'][0]
 					);
@@ -37,10 +53,12 @@ class Search extends React.Component {
 						: null;
 
 					if (hasSuggestions) {
+						console.log(suggestionsRes);
 						let suggestions = suggestionsRes.map(book => {
 							return {
-								title: book.best_book[0]['title'][0],
-								author: book.best_book[0]['author'][0]['name'][0]
+								id: book['best_book'][0]['id'][0]['_'],
+								title: book['best_book'][0]['title'][0],
+								author: book['best_book'][0]['author'][0]['name'][0]
 							};
 						});
 
@@ -51,16 +69,27 @@ class Search extends React.Component {
 			.catch(error => console.log(error));
 	}
 
+	handleSelect(bookId) {
+		this.setState({ ...INITIAL_STATE });
+		this.props.history.push(`${ROUTES.BOOK}/${bookId}`);
+	}
+
 	renderSuggestions() {
 		const { title, suggestions } = this.state;
 
 		if (suggestions && title !== '') {
-			return suggestions.map((suggestion, index) => {
+			return suggestions.slice(0, 6).map((suggestion, index) => {
+				const { id, title, author } = suggestion;
+
 				return (
-					<li key={index}>
-						<h4>{suggestion.title}</h4>
-						<p>{suggestion.author}</p>
-					</li>
+					<Option key={id}>
+						<div>
+							<Text strong>{title}</Text>
+						</div>
+						<div>
+							<Text type="secondary">{author}</Text>
+						</div>
+					</Option>
 				);
 			});
 		}
@@ -68,17 +97,18 @@ class Search extends React.Component {
 
 	render() {
 		return (
-			<form>
-				<Input
-					name='title'
-					value={this.state.title}
-					placeholder='Search books'
-					onChange={this.handleChange}
+			<form className="search">
+				<AutoComplete
+					value={this.state.value}
+					dataSource={this.renderSuggestions()}
+					style={{ width: 360 }}
+					onSearch={this.handleChange}
+					onSelect={this.handleSelect}
+					placeholder="Search books"
 				/>
-				<ul>{this.renderSuggestions()}</ul>
 			</form>
 		);
 	}
 }
 
-export default Search;
+export default withRouter(SearchBox);

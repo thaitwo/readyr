@@ -1,7 +1,17 @@
+/**
+ * DEPENDENCIES
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowswerRoute as Router, Route } from 'react-router-dom';
 
+/**
+ * COMPONENTS
+ */
 import App from './js/App.js';
+
+/**
+ * STYLES
+ */
+import './scss/styles.scss';
 
 ReactDOM.render(<App />, document.getElementById('app'));

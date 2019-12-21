@@ -1,0 +1,30 @@
+.search {
+	padding-left: 40px;
+}
+
+.search-suggestions {
+	background: $white;
+	position: absolute;
+	width: 360px;
+
+	li {
+		border-bottom: 1px solid rgba($black, 0.1);
+		cursor: pointer;
+		overflow: auto;
+		padding: 8px 12px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		&:hover {
+			background: rgba(24, 144, 255, 0.06);
+		}
+
+		h4 {
+			line-height: 1;
+		}
+		p {
+			line-height: 1;
+			margin-bottom: 0;
+		}
+	}
+}
