@@ -44,7 +44,6 @@ class SearchBox extends React.Component {
 			})
 			.then(xml => {
 				parseString(xml.data, (err, result) => {
-					console.log('hey', result);
 					let hasSuggestions = _.isPlainObject(
 						result['GoodreadsResponse']['search'][0]['results'][0]
 					);
@@ -105,6 +104,7 @@ class SearchBox extends React.Component {
 					onSearch={this.handleChange}
 					onSelect={this.handleSelect}
 					placeholder="Search books"
+					size="default"
 				/>
 			</form>
 		);

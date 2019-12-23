@@ -2,8 +2,29 @@
 	padding: 80px 0;
 }
 
-.bookpage {
-	&-similar-books {
-		padding: 24px 0;
+.bookpage-image {
+	margin: 8px 0 24px 0;
+	width: 140px;
+}
+
+.bookpage-ratings-container {
+	padding-top: 8px;
+
+	span {
+		padding: 0 16px;
+	}
+}
+
+.bookpage-description {
+	padding-top: 24px;
+}
+
+.bookpage-similar-books {
+	li {
+		border-bottom: 1px dashed rgba($black, 0.06);
+		overflow: hidden;
+		padding: 8px 0;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }

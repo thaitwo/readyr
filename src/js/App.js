@@ -3,9 +3,9 @@
  */
 import React from 'react';
 import Search from './components/Search';
-import { HashRouter, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { Layout } from 'antd';
+import { Layout, Button } from 'antd';
 
 const history = createBrowserHistory();
 const { Header, Footer } = Layout;
@@ -23,7 +23,7 @@ import BookPage from './pages/BookPage';
 import * as ROUTES from './const/routes';
 
 const App = () => (
-	<HashRouter history={history}>
+	<Router history={history}>
 		<Layout className="layout">
 			<Header className="topbar">
 				<div className="topbar-inner-container">
@@ -33,6 +33,7 @@ const App = () => (
 					<div className="topbar-nav-search-container">
 						<Navigation />
 						<Search />
+						<Button type="primary">Sign In</Button>
 					</div>
 				</div>
 			</Header>
@@ -40,11 +41,11 @@ const App = () => (
 			<Route path={`${ROUTES.BOOK}/:bookId`} component={BookPage} />
 			<Footer style={{ padding: '64px 0' }}>
 				<div className="layout-container">
-					<div>Readyr.io</div>
+					<div>Readyr</div>
 				</div>
 			</Footer>
 		</Layout>
-	</HashRouter>
+	</Router>
 );
 
 export default App;

@@ -16,7 +16,6 @@ const Navigation = () => (
 			<Link to={ROUTES.HOME}>Home</Link>
 		</Menu.Item>
 		<Menu.Item key="2">My Books</Menu.Item>
-		<Menu.Item key="3">Browse</Menu.Item>
 	</Menu>
 );
 
