@@ -1,11 +1,12 @@
 # Readyr
 
-> Find books. Track books. Everything books.
+> Search books to see their synopsis and ratings.
 
 ### TECHNOLOGIES USED
 * [React](https://reactjs.org/)
 * [Webpack](https://webpack.js.org/)
 * [Sass](https://sass-lang.com/)
+* [Ant Design](https://ant.design/)
 
 ### START APP LOCALLY
 1. From root directory, run `npm run start:dev`

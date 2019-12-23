@@ -7,6 +7,7 @@ import { Typography } from 'antd';
 const { Text } = Typography;
 
 import * as ROUTES from '../const/routes';
+import { trimString } from '../utils';
 
 const BooksList = ({ books }) => {
 	const booksList = books.map(book => {
@@ -16,7 +17,7 @@ const BooksList = ({ books }) => {
 			backgroundPosition: 'top center',
 			borderRadius: '4px',
 			height: '220px',
-			marginBottom: '8px'
+			marginBottom: '12px'
 		};
 
 		return (
@@ -24,7 +25,7 @@ const BooksList = ({ books }) => {
 				<Link to={`${ROUTES.BOOK}/${book.id}`}>
 					<div style={styles}></div>
 					<div className="bookslist-card-meta">
-						<Text strong>{book.title.substr(0, 40)}</Text>
+						<Text strong>{trimString(book.title, 40)}</Text>
 						<Text type="secondary">{book.author}</Text>
 					</div>
 				</Link>

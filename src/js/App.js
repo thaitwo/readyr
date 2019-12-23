@@ -31,9 +31,7 @@ const App = () => (
 						<div className="logo">Readyr</div>
 					</Link>
 					<div className="topbar-nav-search-container">
-						<Navigation />
 						<Search />
-						<Button type="primary">Sign In</Button>
 					</div>
 				</div>
 			</Header>

@@ -10,7 +10,10 @@ const { Title } = Typography;
 /**
  * CONSTANTS
  */
-import { popularBooks } from '../const/popularBooks';
+import { popNonfiction } from '../data/popNonfiction';
+import { newFiction } from '../data/newFiction';
+import { newNonfiction } from '../data/newNonfiction';
+import { newMemoir } from '../data/newMemoir';
 
 class HomePage extends React.Component {
 	constructor(props) {
@@ -24,8 +27,14 @@ class HomePage extends React.Component {
 			<div>
 				<Layout className="layout-container">
 					<Content className="layout-content">
-						<Title level={3}>Popular Non Fiction</Title>
-						<BooksList books={popularBooks} />
+						<Title level={3}>Popular Nonfiction</Title>
+						<BooksList books={popNonfiction} />
+						<Title level={3}>New Releases Nonfiction</Title>
+						<BooksList books={newNonfiction} />
+						<Title level={3}>New Releases Fiction</Title>
+						<BooksList books={newFiction} />
+						<Title level={3}>New Releases Memoir</Title>
+						<BooksList books={newMemoir} />
 					</Content>
 				</Layout>
 			</div>

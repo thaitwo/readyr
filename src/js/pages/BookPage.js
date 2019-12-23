@@ -4,14 +4,16 @@
 import React from 'react';
 import axios from 'axios';
 import parse from 'html-react-parser';
+import { Link } from 'react-router-dom';
 import { parseString } from 'xml2js';
-import { Typography, Rate, Row, Col } from 'antd';
+import { Typography, Rate, Row, Col, Skeleton, Spin } from 'antd';
 const { Title, Text, Paragraph } = Typography;
 
 /**
  * CONSTANTS
  */
 import { API_BASE_URL, CROSS_ORIGIN_URL } from '../const/api';
+import * as ROUTES from '../const/routes';
 
 class BookPage extends React.Component {
 	constructor(props) {
@@ -25,11 +27,11 @@ class BookPage extends React.Component {
 			description: '',
 			numPages: '',
 			avgRating: '',
-			rateValue: 0,
 			ratingsCount: '',
 			reviewsCount: '',
 			imgUrl: '',
-			similarBooks: []
+			similarBooks: [],
+			loading: false
 		};
 	}
 
@@ -37,13 +39,14 @@ class BookPage extends React.Component {
 		this.getBook();
 	}
 
-	componentDidUpdate(prevProps, prevState) {
+	componentDidUpdate(prevProps) {
 		if (prevProps.match.params.bookId !== this.props.match.params.bookId) {
 			this.getBook();
 		}
 	}
 
 	getBook() {
+		this.setState({ loading: true });
 		const bookId = this.props.match.params.bookId;
 
 		axios
@@ -55,7 +58,6 @@ class BookPage extends React.Component {
 			})
 			.then(xml => {
 				parseString(xml.data, (err, result) => {
-					console.log(result['GoodreadsResponse']['book'][0]);
 					let {
 						title: [title],
 						authors: [{ author }],
@@ -71,13 +73,15 @@ class BookPage extends React.Component {
 					author =
 						author.length > 1 ? author.map(auth => auth.name[0]).join(',') : author[0]['name'][0];
 
-					const rateValue = Math.round(Number(avgRating));
-
 					let similarBooks = book.slice(0, 10).map(book => {
 						const id = book.id[0];
 						const title = book.title[0];
 
-						return <li key={id}>{title}</li>;
+						return (
+							<li key={id}>
+								<Link to={`${ROUTES.BOOK}/${id}`}>{title}</Link>
+							</li>
+						);
 					});
 
 					this.setState({
@@ -86,34 +90,72 @@ class BookPage extends React.Component {
 						publisher,
 						description,
 						avgRating,
-						rateValue,
 						ratingsCount,
 						reviewsCount,
 						imgUrl,
-						similarBooks
+						similarBooks,
+						loading: false
 					});
 				});
 			})
 			.catch(err => console.log(err));
 	}
 
-	render() {
-		let {
-			title,
-			author,
-			publisher,
-			description,
-			avgRating,
-			rateValue,
-			ratingsCount,
-			reviewsCount,
-			imgUrl,
-			similarBooks
-		} = this.state;
-		let publisherContent;
-
+	renderBookData() {
+		let { title, author, description, avgRating, ratingsCount, reviewsCount } = this.state;
 		ratingsCount = Number(ratingsCount).toLocaleString('en');
 		reviewsCount = Number(reviewsCount).toLocaleString('en');
+		const rateValue = Math.round(Number(avgRating));
+		let titleContent, authorContent, descriptionContent, ratingsContent;
+
+		if (title) {
+			titleContent = <Title level={3}>{title}</Title>;
+		}
+
+		if (author) {
+			authorContent = (
+				<div>
+					<Text strong>by {author}</Text>
+				</div>
+			);
+		}
+
+		if (avgRating) {
+			ratingsContent = (
+				<div className="bookpage-ratings-container">
+					<Rate disabled key={`Rate:${rateValue}`} defaultValue={rateValue} />
+					<Text strong>{avgRating}</Text>
+					<Text type="warning">{String(ratingsCount)} ratings</Text>
+					<Text type="warning">{String(reviewsCount)} reviews</Text>
+				</div>
+			);
+		}
+
+		if (description) {
+			descriptionContent = (
+				<div className="bookpage-description">
+					<Paragraph>{parse(description)}</Paragraph>
+				</div>
+			);
+		}
+
+		return (
+			<div>
+				{titleContent}
+				{authorContent}
+				{ratingsContent}
+				{descriptionContent}
+			</div>
+		);
+	}
+
+	renderBookImagePublisher() {
+		const { imgUrl, publisher } = this.state;
+		let imgContent, publisherContent;
+
+		if (imgUrl) {
+			imgContent = <img src={imgUrl} className="bookpage-image" />;
+		}
 
 		if (publisher) {
 			publisherContent = (
@@ -127,32 +169,38 @@ class BookPage extends React.Component {
 		}
 
 		return (
+			<div>
+				{imgContent}
+				{publisherContent}
+			</div>
+		);
+	}
+
+	renderSimilarBooks() {
+		const { similarBooks } = this.state;
+
+		if (similarBooks) {
+			return (
+				<div>
+					<Title level={4}>Readers also enjoyed...</Title>
+					<ul className="bookpage-similar-books">{similarBooks}</ul>
+				</div>
+			);
+		}
+	}
+
+	render() {
+		const { loading } = this.state;
+
+		return (
 			<div className="bookpage-container layout-container">
 				<Row type="flex" justify="start" gutter={[0, 80]}>
-					<Col span={5}>
-						<img src={imgUrl} className="bookpage-image" />
-						{publisherContent}
-					</Col>
-					<Col span={12}>
-						<Title level={3}>{title}</Title>
-						<div>
-							<Text strong>by {author}</Text>
-						</div>
-						<div className="bookpage-ratings-container">
-							<Rate disabled key={`Rate:${rateValue}`} defaultValue={rateValue} />
-							<Text strong>{avgRating}</Text>
-							<Text type="warning">{String(ratingsCount)} ratings</Text>
-							<Text type="warning">{String(reviewsCount)} reviews</Text>
-						</div>
-						<div className="bookpage-description">
-							<Paragraph>{parse(description)}</Paragraph>
-						</div>
-					</Col>
+					<Col span={5}>{loading ? <Spin size="large" /> : this.renderBookImagePublisher()}</Col>
+					<Col span={12}>{loading ? <Skeleton active /> : this.renderBookData()}</Col>
 				</Row>
 				<Row gutter={[0, 80]}>
 					<Col span={12} offset={5}>
-						<Title level={4}>Readers also enjoyed...</Title>
-						<ul className="bookpage-similar-books">{similarBooks}</ul>
+						{loading ? <Skeleton active /> : this.renderSimilarBooks()}
 					</Col>
 				</Row>
 			</div>
