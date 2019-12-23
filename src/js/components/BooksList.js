@@ -12,7 +12,7 @@ import { trimString } from '../utils';
 const BooksList = ({ books }) => {
 	const booksList = books.map(book => {
 		const styles = {
-			backgroundImage: `url(../assets/${book.id}.jpg)`,
+			backgroundImage: `url(./assets/${book.id}.jpg)`,
 			backgroundSize: 'cover',
 			backgroundPosition: 'top center',
 			borderRadius: '4px',

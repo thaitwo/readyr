@@ -23,12 +23,15 @@ import BookPage from './pages/BookPage';
 import * as ROUTES from './const/routes';
 
 const App = () => (
-	<Router history={history}>
+	<Router history={history} basename={process.env.PUBLIC_URL}>
 		<Layout className="layout">
 			<Header className="topbar">
 				<div className="topbar-inner-container">
-					<Link to={ROUTES.HOME}>
-						<div className="logo">Readyr</div>
+					<Link to={ROUTES.HOME} className="topbar-logo">
+						<div>
+							<img src="./assets/logo.png" />
+						</div>
+						<div className="topbar-logo-text">Readyr</div>
 					</Link>
 					<div className="topbar-nav-search-container">
 						<Search />

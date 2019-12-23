@@ -2,6 +2,7 @@
 
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const fs = require('fs');
 
@@ -66,6 +67,10 @@ module.exports = {
 	plugins: [
 		new Dotenv({
 			path: './.env'
+		}),
+		new HtmlWebpackPlugin({
+			template: './dist/index.html',
+			favicon: './favicon.jpg'
 		})
 	],
 	devServer: {
