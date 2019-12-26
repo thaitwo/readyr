@@ -14,6 +14,9 @@
 * [xml2js](https://www.npmjs.com/package/xml2js)
 * [Lodash](https://lodash.com/)
 
+### API REFERENCE
+In order to use the Goodreads API, you need to sign up for a developer key. Read more about it [here](https://www.goodreads.com/api)
+
 ### START APP LOCALLY
 1. From root directory, run `npm run start:dev`
 2. Open browser to [localhost:8000](http://localhost:8000)
