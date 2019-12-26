@@ -1,6 +1,8 @@
 # Readyr
 
-> Search books to see their synopsis and ratings.
+> Looking for information on a book? Do a quick search and get the ratings and synopsis for any book.
+
+[View App](https://thaitwo.github.io/readyr/#/)
 
 ### TECHNOLOGIES USED
 * [React](https://reactjs.org/)
@@ -16,9 +18,9 @@
 1. From root directory, run `npm run start:dev`
 2. Open browser to [localhost:8000](http://localhost:8000)
 
-Changes will be auto compiled and loaded through Webpack.
+Changes will be auto compiled and loaded with Webpack.
 
-### DEPLOY APP
+### DEPLOYMENT
 1. From root directory, run `npm run deploy`
 	- Webpack will build files for production
 	- GitHub Pages will publish files to gh-pages branch
