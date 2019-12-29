@@ -1,0 +1,106 @@
+.ant-layout {
+  background: #ffffff; }
+
+.layout-container {
+  margin: 0 auto;
+  max-width: 1100px;
+  width: 100%; }
+
+.layout-content {
+  padding: 64px 0; }
+
+.topbar-logo {
+  color: #ffa000;
+  display: flex;
+  font-size: 20px;
+  font-weight: bold; }
+  .topbar-logo img {
+    height: auto;
+    width: 48px; }
+  .topbar-logo-text {
+    padding-left: 16px; }
+
+.topbar {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16);
+  height: 65px;
+  position: relative; }
+  .topbar-inner-container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 1100px;
+    width: 100%; }
+  .topbar-nav-search-container {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end; }
+
+.search {
+  padding: 0 40px; }
+
+.search-suggestions {
+  background: #ffffff;
+  position: absolute;
+  width: 360px; }
+  .search-suggestions li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    overflow: auto;
+    padding: 8px 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+    .search-suggestions li:hover {
+      background: rgba(24, 144, 255, 0.06); }
+    .search-suggestions li h4 {
+      line-height: 1; }
+    .search-suggestions li p {
+      line-height: 1;
+      margin-bottom: 0; }
+
+.ant-layout-footer {
+  color: #ffffff; }
+
+.bookpage-container {
+  padding: 80px 0; }
+
+.bookpage-image {
+  margin: 8px 0 24px 0;
+  width: 140px; }
+
+.bookpage-ratings-container {
+  padding-top: 8px; }
+  .bookpage-ratings-container span {
+    padding: 0 16px; }
+
+.bookpage-description {
+  padding-top: 24px; }
+
+.bookpage-similar-books li {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  padding: 8px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.bookslist {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 40px; }
+  .bookslist li {
+    border-radius: 4px;
+    margin-bottom: 40px;
+    margin-right: 28px;
+    width: 160px; }
+    .bookslist li:nth-of-type(6n) {
+      margin-right: 0; }
+  .bookslist-card-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
+  .bookslist p {
+    font-size: 12px; }
+  .bookslist img {
+    width: 100%; }
+

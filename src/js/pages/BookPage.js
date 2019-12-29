@@ -52,7 +52,7 @@ class BookPage extends React.Component {
 		axios
 			.get(`${CROSS_ORIGIN_URL}/${API_BASE_URL}/book/show.xml`, {
 				params: {
-					key: process.env.API_KEY,
+					key: process.env.GOODREADS_API_KEY,
 					id: bookId
 				}
 			})

@@ -33,39 +33,45 @@ class SearchBox extends React.Component {
 	}
 
 	handleChange(value) {
+		const { history } = this.props;
 		this.setState({ value });
 
-		axios
-			.get(`${CROSS_ORIGIN_URL}/${API_BASE_URL}/search/index.xml`, {
-				params: {
-					key: process.env.API_KEY,
-					q: value
-				}
-			})
-			.then(xml => {
-				parseString(xml.data, (err, result) => {
-					let hasSuggestions = _.isPlainObject(
-						result['GoodreadsResponse']['search'][0]['results'][0]
-					);
-					let suggestionsRes = hasSuggestions
-						? result['GoodreadsResponse']['search'][0]['results'][0]['work']
-						: null;
+		history.push({
+			pathname: 'book',
+			search: `?search=${value}`
+		});
 
-					if (hasSuggestions) {
-						console.log(suggestionsRes);
-						let suggestions = suggestionsRes.map(book => {
-							return {
-								id: book['best_book'][0]['id'][0]['_'],
-								title: book['best_book'][0]['title'][0],
-								author: book['best_book'][0]['author'][0]['name'][0]
-							};
-						});
+		// axios
+		// 	.get(`${CROSS_ORIGIN_URL}/${API_BASE_URL}/search/index.xml`, {
+		// 		params: {
+		// 			key: process.env.GOODREADS_API_KEY,
+		// 			q: value
+		// 		}
+		// 	})
+		// 	.then(xml => {
+		// 		parseString(xml.data, (err, result) => {
+		// 			let hasSuggestions = _.isPlainObject(
+		// 				result['GoodreadsResponse']['search'][0]['results'][0]
+		// 			);
+		// 			let suggestionsRes = hasSuggestions
+		// 				? result['GoodreadsResponse']['search'][0]['results'][0]['work']
+		// 				: null;
 
-						this.setState({ suggestions });
-					}
-				});
-			})
-			.catch(error => console.log(error));
+		// 			if (hasSuggestions) {
+		// 				console.log(suggestionsRes);
+		// 				let suggestions = suggestionsRes.map(book => {
+		// 					return {
+		// 						id: book['best_book'][0]['id'][0]['_'],
+		// 						title: book['best_book'][0]['title'][0],
+		// 						author: book['best_book'][0]['author'][0]['name'][0]
+		// 					};
+		// 				});
+
+		// 				this.setState({ suggestions });
+		// 			}
+		// 		});
+		// 	})
+		// 	.catch(error => console.log(error));
 	}
 
 	handleSelect(bookId) {
