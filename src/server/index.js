@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
+import serialize from 'serialize-javascript';
+import { fetchBookData } from '../shared/api';
 
 import App from '../shared/App';
-import React from 'react';
 
 const app = express();
 
@@ -12,21 +14,28 @@ app.use(cors());
 app.use(express.static('dist'));
 
 app.get('*', (req, res) => {
-	const markup = renderToString(<App />);
+	fetchBookData().then(data => {
+		const markup = renderToString(<App data={data} />);
 
-	res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>SSR with RR</title>
-        <link rel="stylesheet" href="/main.css" />
-        <script src="/app.bundle.js" defer></script>
-      </head>
-      <body>
-        <div id="app">${markup}</div>
-      </body>
-    </html>
-  `);
+		res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>SSR with RR</title>
+            <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css"
+            />
+            <link rel="stylesheet" href="/main.css" />
+            <script src="/app.bundle.js" defer></script>
+            <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+          </head>
+          <body>
+            <div id="app">${markup}</div>
+          </body>
+        </html>
+      `);
+	});
 });
 
 app.listen(3000, () => {

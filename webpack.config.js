@@ -6,11 +6,8 @@ const nodeExternals = require('webpack-node-externals');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs');
-const lessToJs = require('less-vars-to-js');
+const AntdScssThemePlugin = require('antd-scss-theme-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const themeVariables = lessToJs(
-	fs.readFileSync(path.join(__dirname, './ant-theme-vars.less'), 'utf8')
-);
 
 // SERVER CONFIG
 const serverConfig = {
@@ -44,6 +41,9 @@ const serverConfig = {
 	plugins: [
 		new webpack.DefinePlugin({
 			__isBrowser__: 'false'
+		}),
+		new Dotenv({
+			path: './.env'
 		})
 	],
 	mode: 'development'
@@ -66,36 +66,53 @@ const browserConfig = {
 						loader: 'babel-loader',
 						options: {
 							presets: ['@babel/preset-env', '@babel/preset-react'],
-							plugins: ['@babel/plugin-proposal-object-rest-spread']
+							plugins: [
+								'@babel/plugin-proposal-object-rest-spread',
+								[
+									'import',
+									{
+										libraryName: 'antd',
+										style: true
+									}
+								]
+							]
 						}
 					}
-				]
+				],
+				exclude: /node_modules/
 			},
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
-					MiniCssExtractPlugin.loader,
-					// Creates `style` nodes from JS strings
-					// 'style-loader',
-					// Translates CSS into CommonJS
-					'css-loader',
-					// Compiles Sass to CSS
-					'sass-loader'
+					{
+						loader: MiniCssExtractPlugin.loader
+					},
+					{
+						loader: 'css-loader'
+					},
+					{
+						loader: 'sass-loader'
+					}
 				]
 			},
 			{
 				test: /\.less$/,
 				use: [
-					{ loader: MiniCssExtractPlugin.loader },
-					// { loader: 'style-loader' },
-					{ loader: 'css-loader' },
 					{
+						loader: MiniCssExtractPlugin.loader
+					},
+					{
+						loader: 'css-loader',
+						options: {
+							importLoaders: 1
+						}
+					},
+					AntdScssThemePlugin.themify({
 						loader: 'less-loader',
 						options: {
-							modifyVars: themeVariables,
 							javascriptEnabled: true
 						}
-					}
+					})
 				]
 			}
 		]
@@ -107,6 +124,10 @@ const browserConfig = {
 		new webpack.DefinePlugin({
 			__isBrowser__: 'true'
 		}),
+		new Dotenv({
+			path: './.env'
+		}),
+		new AntdScssThemePlugin('./src/scss/base/_theme.scss'),
 		new MiniCssExtractPlugin({
 			filename: '[name].css',
 			chunkFilename: '[id].css'

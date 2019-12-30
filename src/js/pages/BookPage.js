@@ -12,7 +12,7 @@ const { Title, Text, Paragraph } = Typography;
 /**
  * CONSTANTS
  */
-import { API_BASE_URL, CROSS_ORIGIN_URL } from '../const/api';
+import { GOODREADS_API_BASE_URL, CROSS_ORIGIN_URL } from '../const/api';
 import * as ROUTES from '../const/routes';
 
 class BookPage extends React.Component {
@@ -50,7 +50,7 @@ class BookPage extends React.Component {
 		const bookId = this.props.match.params.bookId;
 
 		axios
-			.get(`${CROSS_ORIGIN_URL}/${API_BASE_URL}/book/show.xml`, {
+			.get(`${CROSS_ORIGIN_URL}/${GOODREADS_API_BASE_URL}/book/show.xml`, {
 				params: {
 					key: process.env.GOODREADS_API_KEY,
 					id: bookId
