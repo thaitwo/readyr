@@ -4,6 +4,7 @@
 import React from 'react';
 import axios from 'axios';
 import parse from 'html-react-parser';
+import withUnmounted from '@ishawnwang/withunmounted';
 import { Link } from 'react-router-dom';
 import { parseString } from 'xml2js';
 import { Typography, Rate, Row, Col, Skeleton, Spin } from 'antd';
@@ -16,6 +17,8 @@ import { API_BASE_URL, CROSS_ORIGIN_URL } from '../const/api';
 import * as ROUTES from '../const/routes';
 
 class BookPage extends React.Component {
+	hasUnmounted = false;
+
 	constructor(props) {
 		super(props);
 
@@ -39,6 +42,7 @@ class BookPage extends React.Component {
 		this.getBook();
 	}
 
+	// This allows page to load new data on new book search
 	componentDidUpdate(prevProps) {
 		if (prevProps.match.params.bookId !== this.props.match.params.bookId) {
 			this.getBook();
@@ -71,7 +75,7 @@ class BookPage extends React.Component {
 					} = result['GoodreadsResponse']['book'][0];
 
 					author =
-						author.length > 1 ? author.map(auth => auth.name[0]).join(',') : author[0]['name'][0];
+						author.length > 1 ? author.map(auth => auth.name[0]).join(', ') : author[0]['name'][0];
 
 					let similarBooks = book.slice(0, 10).map(book => {
 						const id = book.id[0];
@@ -83,6 +87,11 @@ class BookPage extends React.Component {
 							</li>
 						);
 					});
+
+					if (this.hasUnmounted) {
+						// check hasUnmounted flag
+						return;
+					}
 
 					this.setState({
 						title,
@@ -98,9 +107,8 @@ class BookPage extends React.Component {
 					});
 				});
 			})
-			.catch(err => console.log(err));
+			.catch(error => console.warn(error));
 	}
-
 	renderBookData() {
 		let { title, author, description, avgRating, ratingsCount, reviewsCount } = this.state;
 		ratingsCount = Number(ratingsCount).toLocaleString('en');
@@ -208,4 +216,4 @@ class BookPage extends React.Component {
 	}
 }
 
-export default BookPage;
+export default withUnmounted(BookPage);

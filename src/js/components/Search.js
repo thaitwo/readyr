@@ -52,7 +52,6 @@ class SearchBox extends React.Component {
 						: null;
 
 					if (hasSuggestions) {
-						console.log(suggestionsRes);
 						let suggestions = suggestionsRes.map(book => {
 							return {
 								id: book['best_book'][0]['id'][0]['_'],
@@ -69,6 +68,7 @@ class SearchBox extends React.Component {
 	}
 
 	handleSelect(bookId) {
+		// console.log(this.props.history);
 		this.setState({ ...INITIAL_STATE });
 		this.props.history.push(`${ROUTES.BOOK}/${bookId}`);
 	}

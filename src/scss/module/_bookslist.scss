@@ -13,6 +13,10 @@
 		&:nth-of-type(6n) {
 			margin-right: 0;
 		}
+
+		&:hover span {
+			text-decoration: underline;
+		}
 	}
 
 	&-card-meta {
